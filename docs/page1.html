@@ -1,106 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpendicular 3D Design and Fab</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #0a0a0a;
-            font-family: 'Courier New', Courier, monospace;
-            color: #00ff00;
-            position: relative; /* Ensure the body is positioned relative for absolute positioning of child elements */
-        }
-        .blog-content {
-            position: absolute;
-            top: 20px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
-            width: 80%;
-            max-width: 800px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 2px solid #00ff00;
-            box-shadow: 0 0 20px #00ff00;
-            z-index: 1000;
-        }
-        h1, h2, h3, p {
-            margin: 10px 0;
-        }
-        a {
-            color: #00ff00;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>3D Model Viewer</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
 </head>
 <body>
-    <div class="blog-content">
-        <h1>Welcome to Perpendicular 3D design and Fabrication</h1>
-        <p>Here we cover some of the most exciting techniques in 3D design and fabrication along with some extras.</p>
-        <h2>Latest Posts</h2>
-        <h3>Post Title 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        <a href="#">Read More</a>
-        <h3>Post Title 2</h3>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <a href="#">Read More</a>
-    </div>
+  <!-- Three.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <!-- OBJLoader CDN -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+    import { OBJLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/OBJLoader.js';
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-        // Add ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
+    // Light
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1).normalize();
+    scene.add(light);
 
-        // Add directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(1, 1, 1).normalize();
-        scene.add(directionalLight);
+    // OBJ Loader
+    const loader = new OBJLoader();
+    loader.load(
+      'models/monster.obj', // Adjust path if necessary
+      function (object) {
+        scene.add(object);
+      },
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      },
+      function (error) {
+        console.error('An error happened', error);
+      }
+    );
 
-        // Load a GLTF model
-        const loader = new THREE.GLTFLoader();
-        loader.load('https://github.com/perpendicularai/showcase/blob/main/docs/Sliding_door_guide.gltf', function(gltf) {
-            const model = gltf.scene;
-            model.scale.set(1, 1, 1); // Adjust scale as needed
-            scene.add(model);
-        }, undefined, function(error) {
-            console.error(error);
-        });
+    camera.position.z = 5;
 
-        camera.position.z = 5;
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
 
-        function animate() {
-            requestAnimationFrame(animate);
+    // Responsive resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 
-            // Rotate the model
-            scene.traverse(function(child) {
-                if (child.isMesh) {
-                    child.rotation.x += 0.01;
-                    child.rotation.y += 0.01;
-                }
-            });
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+  </script>
 </body>
 </html>

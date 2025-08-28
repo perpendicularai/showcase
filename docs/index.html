@@ -1,3 +1,89 @@
-<html>
-  <h1>My site</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1930's Cartoon Meets 1960's Computer Blog</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff00;
+        }
+        canvas {
+            display: block;
+        }
+        .blog-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            z-index: 1000;
+        }
+        h1, h2, h3, p {
+            margin: 10px 0;
+        }
+        a {
+            color: #00ff00;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-content">
+        <h1>Welcome to My Blog</h1>
+        <p>This blog explores the intersection of 1930's cartoon aesthetics with 1960's computer design.</p>
+        <h2>Latest Posts</h2>
+        <h3>Post Title 1</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <a href="#">Read More</a>
+        <h3>Post Title 2</h3>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <a href="#">Read More</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
 </html>

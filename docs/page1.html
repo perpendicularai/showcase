@@ -70,7 +70,7 @@
 
         // Load a GLTF model
         const loader = new THREE.GLTFLoader();
-        loader.load('https://github.com/perpendicularai/showcase/blob/main/docs/Sliding_door_guide.glb', function(gltf) {
+        loader.load('https://github.com/perpendicularai/showcase/blob/main/docs/Sliding_door_guide.gltf', function(gltf) {
             const model = gltf.scene;
             model.scale.set(0.1, 0.1, 0.1); // Adjust scale as needed
             scene.add(model);

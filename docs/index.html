@@ -11,12 +11,15 @@
             background-color: #0a0a0a;
             font-family: 'Courier New', Courier, monospace;
             color: #00ff00;
-            position: relative; /* Ensure the body is positioned relative for absolute positioning of child elements */
+        }
+        canvas {
+            display: block;
         }
         .blog-content {
             position: absolute;
-            top: 20px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 80%;
             max-width: 800px;
             padding: 20px;
@@ -40,6 +43,7 @@
 <body>
     <div class="blog-content">
         <h1>Welcome to Perpendicular 3D design and Fabrication</h1>
+        <a href="page1.html">Page 1</a>
         <p>Here we cover some of the most exciting techniques in 3D design and fabrication along with some extras.</p>
         <h2>Latest Posts</h2>
         <h3>Post Title 1</h3>
@@ -59,7 +63,7 @@
         document.body.appendChild(renderer.domElement);
 
         const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00});
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
 
